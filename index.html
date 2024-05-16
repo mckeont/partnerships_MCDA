@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partnerships Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin: 0;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 20px 0 5px;
+            color: #666;
+        }
+        select {
+            margin-top: 10px;
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        h2 { margin-top: 20px; }
+
+        table.result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table.result-table th,
+        table.result-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        table.result-table th {
+            background-color: #f8f8f8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Partnerships Calculator</h1>
+    <form id="partnershipsForm">
+        <label>Intervention Purpose:
+            <select id="interventionPurpose" onchange="updateInterventionType()">
+                <option value="">Select Purpose</option>
+                <option value="Improved Water Quality">Improved Water Quality</option>
+                <option value="Erosion Control">Erosion Control</option>
+                <option value="Reduced Sedimentation">Reduced Sedimentation</option>
+                <option value="Increased Supply Resilience">Increased Supply Resilience</option>
+            </select>
+        </label>
+        <label>Intervention Type:
+            <select id="interventionType">
+                <!-- Options will be dynamically added based on the purpose -->
+            </select>
+        </label>
+        <button type="button" onclick="displayResults()">Show Partnership Status</button>
+    </form>
+    <h2>Partnership Status: <span id="description">Please select an intervention purpose and type.</span></h2>
+    <table class="result-table">
+        <thead>
+            <tr>
+                <th>Intervention Purpose</th>
+                <th>Intervention Type</th>
+                <th>Partnership for Implementation Status</th>
+            </tr>
+        </thead>
+        <tbody id="resultsBody">
+            <!-- Dynamically inserted rows will go here -->
+        </tbody>
+    </table>
+    <script>
+        // Define the interventions based on uploaded CSV data
+        const interventions = {
+            'Improved Water Quality': ['Stream restoration', 'Prescribed burns', 'Habitat restoration'],
+            'Erosion Control': ['Forest thinning', 'Mulching', 'Stream restoration', 'Wetland restoration'],
+            'Reduced Sedimentation': ['Wetland restoration', 'Sediment catchments', 'Stream restoration'],
+            'Increased Supply Resilience': ['Wetland restoration', 'Stream restoration', 'Beaver dams']
+        };
+
+        // Function to update the intervention type dropdown
+        function updateInterventionType() {
+            const purpose = document.getElementById('interventionPurpose').value;
+            const typeSelect = document.getElementById('interventionType');
+            typeSelect.innerHTML = '<option value="">Select Type</option>';
+
+            if (purpose && interventions[purpose]) {
+                interventions[purpose].forEach(function(type) {
+                    const option = document.createElement('option');
+                    option.value = type;
+                    option.text = type;
+                    typeSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Function to display the results based on selected intervention type
+        function displayResults() {
+            const purpose = document.getElementById('interventionPurpose').value;
+            const type = document.getElementById('interventionType').value;
+            if (!type) {
+                document.getElementById('description').innerText = 'Please select an intervention type to see the partnership status.';
+                return;
+            }
+
+            document.getElementById('description').innerText = 'The partnership status for the selected intervention type. (Yes, In Process, No)';
+
+            const resultsBody = document.getElementById('resultsBody');
+            const newRow = resultsBody.insertRow();
+            newRow.innerHTML = `
+                <td>${purpose}</td>
+                <td>${type}</td>
+                <td></td>
+            `;
+        }
+    </script>
+</body>
+</html>
